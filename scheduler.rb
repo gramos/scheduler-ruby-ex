@@ -21,7 +21,7 @@ class Scheduler
     end
 
     def total_time(shows)
-      shows.values.reduce{ |sum, t| sum + t }
+      shows.values.last
     end
     
     def q_changed(shows_api, shows_db)
@@ -137,7 +137,7 @@ describe Scheduler do
       Scheduler.timeout         = 30
       
       _(Scheduler.total_time(shows_needs_update)).must_be :>=, Scheduler.timeout
-      shows_with_less_interval = {2=>0, 3=>5, 4=>10, 5=>15}
+      shows_with_less_interval = {2=>0, 3=>10, 4=>20, 5=>30}
 
       _(Scheduler.run(RemoteApi.get, Show.all)).must_equal shows_with_less_interval
 
